@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+*.log
+# SQLite database files (created by setup; never committed)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+packages/api/prisma/*.db*
+.env
+.env.local
+.DS_Store
+# Generated Prisma client
+packages/api/node_modules/.prisma/

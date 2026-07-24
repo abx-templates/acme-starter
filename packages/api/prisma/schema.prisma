@@ -1,0 +1,81 @@
+// Prisma schema — SQLite. Requires Prisma >= 6.2 for enum support on SQLite
+// (enums are enforced at the Prisma Client level, not by the database).
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  TECHNICIAN
+}
+
+enum WorkOrderStatus {
+  OPEN
+  IN_PROGRESS
+  ON_HOLD
+  DONE
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      UserRole @default(TECHNICIAN)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  assignedWorkOrders WorkOrder[] @relation("Assignee")
+}
+
+model Building {
+  id        String   @id @default(cuid())
+  name      String
+  address   String?
+  createdAt DateTime @default(now())
+
+  assets     Asset[]
+  workOrders WorkOrder[]
+}
+
+model Asset {
+  id         String   @id @default(cuid())
+  name       String
+  category   String
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id])
+  createdAt  DateTime @default(now())
+
+  workOrders  WorkOrder[]
+  pmSchedules PmSchedule[]
+}
+
+model WorkOrder {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  status      WorkOrderStatus @default(OPEN)
+  buildingId  String
+  building    Building        @relation(fields: [buildingId], references: [id])
+  assetId     String?
+  asset       Asset?          @relation(fields: [assetId], references: [id])
+  assigneeId  String?
+  assignee    User?           @relation("Assignee", fields: [assigneeId], references: [id])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model PmSchedule {
+  id         String   @id @default(cuid())
+  title      String
+  assetId    String
+  asset      Asset    @relation(fields: [assetId], references: [id])
+  recurrence String
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
