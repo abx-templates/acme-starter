@@ -24,10 +24,10 @@ cp packages/api/.env.example packages/api/.env
 npm --prefix packages/api install
 npm --prefix packages/web install
 npm --prefix packages/api run db:setup   # runs migrations, seeds the database
-node scripts/preflight.mjs              # verifies your environment is ready
+./scripts/preflight.sh                # verifies your environment is ready
 ```
 
-`node scripts/preflight.mjs` should end with "All good"
+`./scripts/preflight.sh` should end with "All good"
 If it doesn't, follow the commands it prints.
 **If you can't get to a clean preflight, tell us before the session** -
 we'd rather sort setup out ahead of time than spend the interview on it.
