@@ -145,7 +145,7 @@ finish
 
 # --- Ports -----------------------------------------------------------------
 begin 'Network ports'
-for entry in 3000:API 5173:Web; do
+for entry in 8000:API 8001:Web; do
   port="${entry%%:*}"
   name="${entry#*:}"
   listener="$(port_listener "$port")"

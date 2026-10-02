@@ -37,8 +37,8 @@ we'd rather sort setup out ahead of time than spend the interview on it.
 Start the API and the web app in separate terminals:
 
 ```bash
-npm --prefix packages/api start    # http://localhost:3000/api
-npm --prefix packages/web start    # http://localhost:5173
+npm --prefix packages/api start    # http://localhost:8000/api
+npm --prefix packages/web start    # http://localhost:8001
 ```
 
 The web dev server proxies `/api` to the NestJS server. Requests are authenticated

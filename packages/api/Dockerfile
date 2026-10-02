@@ -12,5 +12,5 @@ COPY packages/api ./
 RUN npm run db:generate && npm run build
 
 ENV DATABASE_URL="file:./prisma/dev.db"
-EXPOSE 3000
+EXPOSE 8000
 CMD ["node", "dist/main.js"]
