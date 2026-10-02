@@ -2,50 +2,44 @@
 
 A small, self-contained CMMS (facilities maintenance) application that mirrors our
 production stack. You'll extend it during a live session. Please complete **Setup**
-below *before* the session so we can spend our time together on the work itself.
+below _before_ the session so we can spend our time together on the work itself.
 
 ## Stack
 
-| Layer | Tech |
-|-------|------|
-| API (`packages/api`) | NestJS · TypeScript · Prisma · SQLite |
+| Layer                | Tech                                       |
+| -------------------- | ------------------------------------------ |
+| API (`packages/api`) | NestJS · TypeScript · Prisma · SQLite      |
 | Web (`packages/web`) | React 19 · TanStack Router · MUI v7 · Vite |
-| Tooling | pnpm workspaces · Node 24 |
+| Tooling              | npm · Node 24                              |
 
 SQLite is used instead of PostgreSQL purely to keep setup dependency-free — no
 database server to install.
 
 ## Setup (do this in advance)
 
-**Prerequisites:** Node 24 (`nvm install 24` / `fnm install 24`) and pnpm via Corepack.
+**Prerequisites:** Node 24 (`nvm install 24` / `fnm install 24`).
 
 ```bash
-corepack enable
-corepack prepare pnpm@10.11.0 --activate
-
 cp packages/api/.env.example packages/api/.env
-pnpm bootstrap    # installs deps, runs migrations, seeds the database
-pnpm preflight    # verifies your environment is ready
+npm --prefix packages/api install
+npm --prefix packages/web install
+npm --prefix packages/api run db:setup   # runs migrations, seeds the database
+./scripts/preflight.sh                # verifies your environment is ready
 ```
 
-`pnpm preflight` should end with "All good." If it doesn't, follow the commands it
-prints. **If you can't get to a clean `pnpm preflight`, tell us before the session** —
+`./scripts/preflight.sh` should end with "All good"
+If it doesn't, follow the commands it prints.
+**If you can't get to a clean preflight, tell us before the session** -
 we'd rather sort setup out ahead of time than spend the interview on it.
-
-> These scripts are named `bootstrap` and `preflight` rather than `setup` and
-> `doctor` on purpose: `pnpm setup` and `pnpm doctor` are reserved pnpm
-> subcommands that would shadow same-named package scripts and silently do
-> nothing. If you ever add a script whose name collides with a pnpm command, run
-> it with `pnpm run <name>`.
 
 ## Running
 
-```bash
-pnpm dev
-```
+Start the API and the web app in separate terminals:
 
-- API → http://localhost:3000/api
-- Web → http://localhost:5173
+```bash
+npm --prefix packages/api start    # http://localhost:8000/api
+npm --prefix packages/web start    # http://localhost:8001
+```
 
 The web dev server proxies `/api` to the NestJS server. Requests are authenticated
 via an `x-user-id` header (see `packages/web/src/api/client.ts`); seeded users are
