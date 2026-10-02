@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nest start --watch",
+    "start": "nest start --watch",
     "build": "nest build",
-    "start": "node dist/main.js",
+    "start:dist": "node dist/main.js",
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --name init",
     "db:seed": "tsx prisma/seed.ts",
-    "db:reset": "prisma migrate reset --force --skip-seed && pnpm db:seed",
-    "db:setup": "prisma migrate dev --name init && pnpm db:seed"
+    "db:reset": "prisma migrate reset --force --skip-seed && npm run db:seed",
+    "db:setup": "prisma migrate dev --name init && npm run db:seed"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

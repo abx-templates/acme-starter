@@ -5,15 +5,12 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-RUN corepack enable
+COPY packages/api/package.json packages/api/package-lock.json ./
+RUN npm ci
 
-COPY package.json pnpm-lock.yaml* ./
-COPY packages/api/package.json ./packages/api/
-RUN pnpm install --filter @acme/api... --frozen-lockfile || pnpm install --filter @acme/api...
-
-COPY packages/api ./packages/api
-RUN pnpm --filter @acme/api db:generate && pnpm --filter @acme/api build
+COPY packages/api ./
+RUN npm run db:generate && npm run build
 
 ENV DATABASE_URL="file:./prisma/dev.db"
 EXPOSE 3000
-CMD ["node", "packages/api/dist/main.js"]
+CMD ["node", "dist/main.js"]
